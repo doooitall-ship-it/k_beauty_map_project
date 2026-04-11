@@ -547,13 +547,27 @@ def main():
                 })
 
             best_persona = st.session_state['best_persona']
+            
+            persona_img_map = {
+                '홍콩': 'persona_hongkong.png',
+                '대만': 'persona_taiwan.png',
+                '일본': 'persona_japan.png',
+                '미국': 'persona_usa.png',
+                '중국': 'persona_china.png'
+            }
+            p_img_path = os.path.join(TOUR_IMG_DIR, persona_img_map.get(best_persona, ''))
+            p_img_base64 = get_base64_img(p_img_path)
+            
+            p_img_tag = f'<img src="data:image/png;base64,{p_img_base64}" style="width:100%; max-width:280px; border-radius:20px; margin:20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">' if p_img_base64 else ''
+
             st.markdown(f"""
                 <div class='persona-result'>
                     <h1>당신의 K-Beauty 페르소나 (Your Persona)</h1>
-                    <h2 style='font-size:35px; margin:20px 0;'>{PERSONA_INFO[best_persona][0]}</h2>
-                    <p style='font-size:18px;'><i>"{PERSONA_INFO[best_persona][1]}"</i></p>
-                    <p style="margin-top:20px; font-weight: 700;">추천 자치구: {st.session_state['user_district']}</p>
-                    <p><b>🔍 [Must-buy Items for You]</b></p>
+                    {p_img_tag}
+                    <h2 style='font-size:32px; margin:10px 0 15px 0;'>{PERSONA_INFO[best_persona][0]}</h2>
+                    <p style='font-size:17px; margin-bottom:20px;'><i>"{PERSONA_INFO[best_persona][1]}"</i></p>
+                    <p style="font-weight: 700; color: #2d3436; font-size:16px;">추천 자치구: {st.session_state['user_district']}</p>
+                    <p style="margin-top:25px; font-weight:800; color:#F93780; font-size:17px;">🔍 [Must-buy Items for You]</p>
                 </div>
             """, unsafe_allow_html=True)
             
